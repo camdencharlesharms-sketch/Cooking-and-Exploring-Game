@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cooking and Exploring</title>
+<style>
+:root{--leaf:#193f2c;--lime:#b6dc75;--cream:#fff6df;--gold:#ffd166}
+*{box-sizing:border-box}
+body{margin:0;font-family:Trebuchet MS,system-ui,sans-serif;color:#fff;background:#102c20}
+.jungle{min-height:100vh;background:linear-gradient(180deg,rgba(5,24,15,.45),rgba(7,28,18,.88)),url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2000&q=85") center/cover fixed;position:relative;overflow:hidden}
+.jungle:before,.jungle:after{content:"";position:fixed;pointer-events:none;z-index:0;opacity:.4}
+.jungle:before{inset:0;background:radial-gradient(ellipse at 12% 20%,#9bd65b 0 2px,transparent 3px),radial-gradient(ellipse at 80% 35%,#c5e88a 0 2px,transparent 3px);background-size:90px 110px}
+header,.wrap{position:relative;z-index:1}
+header{padding:28px 5vw 16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{font-size:clamp(25px,4vw,42px);font-weight:1000;letter-spacing:-1px;text-shadow:0 4px 18px #000}
+.logo span{color:var(--lime)}
+.money{background:#102c20dd;border:1px solid #b6dc7580;border-radius:18px;padding:12px 20px;font-size:20px;font-weight:900;box-shadow:0 8px 25px #0005}
+.wrap{max-width:1150px;margin:auto;padding:12px 5vw 50px}
+.hero{padding:25px 0 20px}
+.eyebrow{color:var(--lime);font-weight:900;letter-spacing:3px;text-transform:uppercase;font-size:12px}
+h1{font-size:clamp(35px,6vw,66px);line-height:1;margin:10px 0;text-shadow:0 5px 20px #0008}
+.subtitle{color:#e5f0df;font-size:17px;max-width:650px;line-height:1.5}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:22px}
+.panel{background:linear-gradient(145deg,#173e2eeF,#0d281feF);border:1px solid #c5e88a55;border-radius:22px;padding:22px;box-shadow:0 14px 35px #0005;backdrop-filter:blur(7px)}
+.panel h2{margin:0 0 14px;font-size:22px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:#ffffff12;border-radius:14px;padding:10px 13px;color:#eaf4df;font-size:13px}
+.stat b{display:block;color:var(--gold);font-size:19px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+button{border:0;border-radius:12px;padding:12px 16px;font:700 14px inherit;cursor:pointer;transition:.15s; color:#173322;background:var(--lime);box-shadow:0 4px 0 #648b3c}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+button:active{transform:translateY(2px);box-shadow:none}
+button.secondary{background:#f4e6c4;box-shadow:0 4px 0 #bba77b}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.food-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.food{display:flex;align-items:center;gap:10px;background:#ffffff10;border:1px solid #ffffff1b;border-radius:14px;padding:11px}
+.emoji{font-size:29px}
+.food-name{font-weight:800}
+.food-meta{font-size:12px;color:#c7d9c1;margin-top:3px}
+.food button{margin-left:auto;padding:8px 10px;font-size:12px;white-space:nowrap}
+.log{min-height:104px;max-height:180px;overflow:auto;background:#071b14aa;border-radius:13px;padding:12px;color:#dcebd5;font-size:13px;line-height:1.55}
+.log p{margin:4px 0}
+.recipe{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff20}
+.recipe:last-child{border:0}
+.recipe small{display:block;color:#c7d9c1;margin-top:4px}
+.tag{font-size:11px;color:#193322;background:var(--gold);padding:4px 8px;border-radius:20px;font-weight:900}
+footer{text-align:center;color:#d5e5cc;font-size:12px;padding:22px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.food-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="jungle">
+<header><div class="logo">🌿 COOKING <span>&</span> EXPLORING</div><div class="money">💰 $<span id="money">1.00</span></div></header>
+<main class="wrap">
+<section class="hero">
+<div class="eyebrow">A wild little adventure</div>
+<h1>Cook. Explore.<br><span style="color:#c9ed91">Discover.</span></h1>
+<p class="subtitle">Start with just $1, explore the jungle to find ingredients and coins, then cook tasty discoveries. Build your food index as you go!</p>
+</section>
+<div class="stats">
+<div class="stat">🎒 Ingredients<b id="ingredientCount">0</b></div>
+<div class="stat">📖 Foods discovered<b id="discoveredCount">0 / 8</b></div>
+<div class="stat">🧭 Jungle trips<b id="trips">0</b></div>
+</div>
+<div class="grid">
+<section class="panel">
+<h2>🧭 Explore the jungle</h2>
+<p style="color:#d5e5cc;margin-top:-5px">Pick a trail and see what you can find. Every trip costs a little energy, but exploring is free!</p>
+<div class="actions">
+<button onclick="explore('river')">🌊 River trail</button>
+<button onclick="explore('grove')">🌴 Fruit grove</button>
+<button onclick="explore('ruins')">🗿 Old ruins</button>
+</div>
+<h3 style="margin:22px 0 10px">📜 Adventure log</h3>
+<div class="log" id="log"><p>🌱 Your adventure begins! You have $1.00. Try exploring the fruit grove.</p></div>
+</section>
+<section class="panel">
+<h2>🍳 Cooking camp</h2>
+<p style="color:#d5e5cc;margin-top:-5px">Combine ingredients to make food. Sell your dishes to earn coins!</p>
+<div id="recipes"></div>
+</section>
+<section class="panel">
+<h2>🧺 Food market</h2>
+<p style="color:#d5e5cc;margin-top:-5px">Spend your starting dollar wisely. Prices are shown below.</p>
+<div class="food-list" id="market"></div>
+</section>
+<section class="panel">
+<h2>📖 Food index</h2>
+<p style="color:#d5e5cc;margin-top:-5px">Your field guide fills up when you discover or cook a food.</p>
+<div class="food-list" id="index"></div>
+</section>
+</div>
+<footer>Cooking & Exploring · Jungle Adventure</footer>
+</main>
+</div>
+<script>
+let money=1, trips=0, bag={}, discovered=new Set();
+const foods=[
+ {id:'banana',name:'Banana',emoji:'🍌',price:.35,desc:'A sweet jungle snack'},
+ {id:'berry',name:'Wild berries',emoji:'🫐',price:.45,desc:'Juicy berries from the grove'},
+ {id:'coconut',name:'Coconut',emoji:'🥥',price:.60,desc:'Fresh tropical coconut'},
+ {id:'mushroom',name:'Mushroom',emoji:'🍄',price:.30,desc:'A forest-floor find'},
+ {id:'fish',name:'River fish',emoji:'🐟',price:.75,desc:'Caught near the river'},
+ {id:'herb',name:'Jungle herbs',emoji:'🌿',price:.25,desc:'Fragrant cooking herbs'},
+ {id:'corn',name:'Wild corn',emoji:'🌽',price:.55,desc:'A golden jungle crop'},
+ {id:'honey',name:'Wild honey',emoji:'🍯',price:.80,desc:'A rare sweet treat'}
+];
+const recipes=[
+ {id:'fruitbowl',name:'Tropical fruit bowl',emoji:'🥣',needs:{banana:1,berry:1},sell:1.25,desc:'1 banana + 1 berry'},
+ {id:'coconutsoup',name:'Coconut soup',emoji:'🍲',needs:{coconut:1,herb:1},sell:1.65,desc:'1 coconut + 1 herb'},
+ {id:'fishmeal',name:'Campfire fish',emoji:'🍽️',needs:{fish:1,herb:1},sell:2.00,desc:'1 fish + 1 herb'},
+ {id:'corncake',name:'Sweet corn cake',emoji:'🧁',needs:{corn:1,honey:1},sell:2.20,desc:'1 corn + 1 honey'}
+];
+function fmt(n){return n.toFixed(2)}
+function addLog(s){let el=document.getElementById('log');el.innerHTML='<p>'+s+'</p>'+el.innerHTML}
+function update(){
+ document.getElementById('money').textContent=fmt(money);
+ document.getElementById('ingredientCount').textContent=Object.values(bag).reduce((a,b)=>a+b,0);
+ document.getElementById('discoveredCount').textContent=discovered.size+' / '+foods.length;
+ document.getElementById('trips').textContent=trips;
+ document.getElementById('market').innerHTML=foods.map(f=>`<div class="food"><span class="emoji">${f.emoji}</span><div><div class="food-name">${f.name}</div><div class="food-meta">$${fmt(f.price)}</div></div><button onclick="buy('${f.id}')">Buy</button></div>`).join('');
+ document.getElementById('index').innerHTML=foods.map(f=>`<div class="food"><span class="emoji">${discovered.has(f.id)?f.emoji:'❔'}</span><div><div class="food-name">${discovered.has(f.id)?f.name:'Undiscovered'}</div><div class="food-meta">${discovered.has(f.id)?f.desc:'Find it while exploring!'}</div></div></div>`).join('');
+ document.getElementById('recipes').innerHTML=recipes.map(r=>{let can=Object.entries(r.needs).every(([k,v])=>(bag[k]||0)>=v);return `<div class="recipe"><div><b>${r.emoji} ${r.name}</b><small>${r.desc} · Sell for $${fmt(r.sell)}</small></div><button ${can?'':'disabled'} onclick="cook('${r.id}')">Cook</button></div>`}).join('');
+}
+function buy(id){let f=foods.find(x=>x.id===id);if(money+1e-9<f.price){addLog('❌ Not enough coins for '+f.name+'. Explore to earn more.');return}money-=f.price;bag[id]=(bag[id]||0)+1;discovered.add(id);addLog('🧺 Bought '+f.name+'.');update()}
+function explore(place){
+ trips++;let rolls={
+ river:[['fish',1],['herb',1],['coin',.65]],
+ grove:[['banana',1],['berry',1],['coconut',1],['coin',.55]],
+ ruins:[['mushroom',1],['corn',1],['honey',1],['coin',.9]]
+ };
+ let pool=rolls[place],pick=pool[Math.floor(Math.random()*pool.length)];
+ if(pick[0]==='coin'){let found=place==='ruins'?.75:.35;money+=found;addLog('✨ You explored '+place+' and found $'+fmt(found)+' in an old pouch!')}
+ else{bag[pick[0]]=(bag[pick[0]]||0)+1;let f=foods.find(x=>x.id===pick[0]);discovered.add(f.id);addLog('🌿 You explored '+place+' and found '+f.emoji+' '+f.name+'!')}
+ if(Math.random()<.22){money+=.20;addLog('🪙 Bonus! You spotted 20¢ on the trail.')}
+ update();
+}
+function cook(id){let r=recipes.find(x=>x.id===id);if(!Object.entries(r.needs).every(([k,v])=>(bag[k]||0)>=v))return;for(let [k,v] of Object.entries(r.needs))bag[k]-=v;money+=r.sell;addLog('🍳 You cooked '+r.name+' and sold it for $'+fmt(r.sell)+'!');update()}
+update();
+</script>
+</body>
+</html>
